@@ -3,10 +3,13 @@ package org.example.eiscuno.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import org.example.eiscuno.model.Card;
+import javafx.scene.layout.GridPane;
 import org.example.eiscuno.model.EISCUnoEnum;
+import org.example.eiscuno.model.cards.CardsMachine;
 
+/**
+ * Controller class for the Uno game.
+ */
 public class GameUnoController {
 
     @FXML
@@ -16,53 +19,32 @@ public class GameUnoController {
     private Button buttonUno;
 
     @FXML
-    private GridPane cardsMachine;
+    private GridPane gridPaneCardsMachine;
 
     @FXML
-    private GridPane cardsPlayer;
+    private GridPane gridPaneCardsPlayer;
 
     @FXML
     private ImageView imageTable;
 
+    private CardsMachine cardsMachine;
+
+    private int numCardsMachine;
+
+    /**
+     * Initializes the controller.
+     */
     @FXML
     public void initialize(){
-        printDeckofCards();
-        printUno();
+        printCardsMachine();
     }
 
-    private void printDeckofCards(){
-        buttonDeck.setBackground(
-                new Background(
-                        new BackgroundImage(
-                                new Card(EISCUnoEnum.DECK_OF_CARDS.getFilePath()).getCardImage(),
-                                BackgroundRepeat.REPEAT,
-                                BackgroundRepeat.REPEAT,
-                                BackgroundPosition.DEFAULT,
-                                new BackgroundSize(
-                                100,
-                                149,
-                                false,
-                                false,
-                                false,
-                                false
-                        ))));
-    }
-
-    private void printUno(){
-        buttonUno.setBackground(
-                new Background(
-                        new BackgroundImage(
-                                new Card(EISCUnoEnum.BUTTON_UNO.getFilePath()).getCardImage(),
-                                BackgroundRepeat.REPEAT,
-                                BackgroundRepeat.REPEAT,
-                                BackgroundPosition.DEFAULT,
-                                new BackgroundSize(
-                                        100,
-                                        50,
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                ))));
+    /**
+     * Prints cards for the machine player.
+     */
+    private void printCardsMachine(){
+        numCardsMachine = 4;
+        cardsMachine = new CardsMachine(EISCUnoEnum.CARD_UNO.getFilePath());
+        cardsMachine.printCards(gridPaneCardsMachine, numCardsMachine);
     }
 }

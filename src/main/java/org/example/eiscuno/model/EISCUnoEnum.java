@@ -1,7 +1,11 @@
 package org.example.eiscuno.model;
 
+/**
+ * Enum EISCUnoEnum
+ *
+ * This enum represents the various file paths for the images used in the EISC Uno game.
+ */
 public enum EISCUnoEnum {
-
     FAVICON("favicon.png"),
     UNO("images/uno.png"),
     BACKGROUND_UNO("images/background_uno.png"),
@@ -64,12 +68,22 @@ public enum EISCUnoEnum {
     RED_9("cards-uno/9_red.png");
 
     private final String filePath;
-    private String PATH = "/org/example/eiscuno/";
+    private static final String PATH = "/org/example/eiscuno/";
 
+    /**
+     * Constructor for the EISCUnoEnum enum.
+     *
+     * @param filePath the file path of the image relative to the base directory
+     */
     EISCUnoEnum(String filePath) {
         this.filePath = PATH + filePath;
     }
 
+    /**
+     * Gets the full file path of the image.
+     *
+     * @return the full file path of the image
+     */
     public String getFilePath() {
         return filePath;
     }

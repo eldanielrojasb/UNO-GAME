@@ -31,7 +31,7 @@
       </Pane>
    </center>
    <top>
-      <GridPane fx:id="cardsMachine" prefHeight="96.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="gridPaneCardsMachine" prefHeight="96.0" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -46,18 +46,22 @@
       </GridPane>
    </top>
    <bottom>
-      <GridPane fx:id="cardsPlayer" prefHeight="96.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="gridPaneCardsPlayer" prefHeight="96.0" BorderPane.alignment="CENTER">
         <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
+         <children>
+            <Button mnemonicParsing="false" prefWidth="74.0" text="Anterior" />
+            <Button mnemonicParsing="false" prefWidth="74.0" text="Siguiente" GridPane.columnIndex="5" />
+         </children>
       </GridPane>
    </bottom>
 </BorderPane>
