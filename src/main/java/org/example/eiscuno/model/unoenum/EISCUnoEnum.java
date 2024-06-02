@@ -1,4 +1,4 @@
-package org.example.eiscuno.model;
+package org.example.eiscuno.model.unoenum;
 
 /**
  * Enum EISCUnoEnum
