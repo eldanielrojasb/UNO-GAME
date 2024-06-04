@@ -1,0 +1,4 @@
+.border-pane-background {
+    -fx-background-image: url("/org/example/eiscuno/images/background_uno.png");
+    -fx-background-size: cover;
+}
