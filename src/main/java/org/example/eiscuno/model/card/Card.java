@@ -8,19 +8,21 @@ import javafx.scene.image.ImageView;
  */
 public class Card {
     private String url;
-    private String nameCard;
-    private ImageView cardImageView;
+    private String value;
+    private String color;
     private Image image;
+    private ImageView cardImageView;
 
     /**
      * Constructs a Card with the specified image URL and name.
      *
      * @param url the URL of the card image
-     * @param nameCard the name of the card
+     * @param value of the card
      */
-    public Card(String url, String nameCard) {
+    public Card(String url, String value, String color) {
         this.url = url;
-        this.nameCard = nameCard;
+        this.value = value;
+        this.color = color;
         this.image = new Image(String.valueOf(getClass().getResource(url)));
         this.cardImageView = createCardImageView();
     }
@@ -48,20 +50,19 @@ public class Card {
     }
 
     /**
-     * Gets the name of the card.
-     *
-     * @return the name of the card
-     */
-    public String getNameCard() {
-        return nameCard;
-    }
-
-    /**
      * Gets the image of the card.
      *
      * @return the Image of the card
      */
     public Image getImage() {
         return image;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public String getColor() {
+        return color;
     }
 }

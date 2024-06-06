@@ -8,6 +8,7 @@ import javafx.scene.layout.GridPane;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
+import org.example.eiscuno.model.machine.Machine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 
@@ -40,6 +41,18 @@ public class GameUnoController {
         initVariables();
         this.gameUno.startGame();
         printCardsHumanPlayer();
+
+        Machine m = new Machine(this.humanPlayer.getCardsPlayer());
+
+        // Solo funciona si la clase hereda de Thread
+        m.start();
+
+        // Solo funciona si la clase implementa de Runnable
+        // Thread t = new Thread(m, "Machine");
+        //t.start();
+
+
+
     }
 
     /**
@@ -66,6 +79,7 @@ public class GameUnoController {
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
+                // Aqui deberian verificar si pueden en la tabla jugar esa carta
                 gameUno.playCard(card);
                 tableImageView.setImage(card.getImage());
                 humanPlayer.removeCard(findPosCardsHumanPlayer(card));
