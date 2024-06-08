@@ -8,13 +8,13 @@ import java.util.ArrayList;
  * Represents the table in the Uno game where cards are played.
  */
 public class Table {
-    private ArrayList<Card> cards;
+    private ArrayList<Card> cardsTable;
 
     /**
      * Constructs a new Table object with no cards on it.
      */
     public Table(){
-        this.cards = new ArrayList<Card>();
+        this.cardsTable = new ArrayList<Card>();
     }
 
     /**
@@ -23,7 +23,7 @@ public class Table {
      * @param card The card to be added to the table.
      */
     public void addCardOnTheTable(Card card){
-        this.cards.add(card);
+        this.cardsTable.add(card);
     }
 
     /**
@@ -33,9 +33,9 @@ public class Table {
      * @throws IndexOutOfBoundsException if there are no cards on the table.
      */
     public Card getCurrentCardOnTheTable() throws IndexOutOfBoundsException {
-        if (cards.isEmpty()) {
+        if (cardsTable.isEmpty()) {
             throw new IndexOutOfBoundsException("There are no cards on the table.");
         }
-        return this.cards.get(this.cards.size()-1);
+        return this.cardsTable.get(this.cardsTable.size()-1);
     }
 }
