@@ -109,6 +109,6 @@ public class GameUno implements IGameUno {
      */
     @Override
     public Boolean isGameOver() {
-        return this.deck.isEmpty();
+        return null;
     }
 }

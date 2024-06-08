@@ -9,12 +9,14 @@ import java.util.ArrayList;
  */
 public class Player implements IPlayer {
     private ArrayList<Card> cardsPlayer;
+    private String typePlayer;
 
     /**
      * Constructs a new Player object with an empty hand of cards.
      */
-    public Player(){
+    public Player(String typePlayer){
         this.cardsPlayer = new ArrayList<Card>();
+        this.typePlayer = typePlayer;
     };
 
     /**
@@ -58,4 +60,7 @@ public class Player implements IPlayer {
         return cardsPlayer.get(index);
     }
 
+    public String getTypePlayer() {
+        return typePlayer;
+    }
 }
