@@ -37,6 +37,7 @@ public class GameUno implements IGameUno {
      */
     @Override
     public void startGame() {
+        table.addCardOnTheTable(deck.takeCard());
         for (int i = 0; i < 10; i++) {
             if (i < 5) {
                 humanPlayer.addCard(this.deck.takeCard());
@@ -68,6 +69,9 @@ public class GameUno implements IGameUno {
     public void playCard(Card card) {
         this.table.addCardOnTheTable(card);
     }
+
+
+
 
     /**
      * Handles the scenario when a player shouts "Uno", forcing the other player to draw a card.

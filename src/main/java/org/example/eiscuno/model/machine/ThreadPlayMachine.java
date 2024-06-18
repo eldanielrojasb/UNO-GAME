@@ -4,6 +4,7 @@ import javafx.scene.image.ImageView;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.model.deck.Deck;
 
 public class ThreadPlayMachine extends Thread {
     private Table table;
@@ -27,6 +28,7 @@ public class ThreadPlayMachine extends Thread {
                     e.printStackTrace();
                 }
                 // Aqui iria la logica de colocar la carta
+
                 putCardOnTheTable();
                 hasPlayerPlayed = false;
             }
@@ -36,9 +38,18 @@ public class ThreadPlayMachine extends Thread {
     private void putCardOnTheTable(){
         int index = (int) (Math.random() * machinePlayer.getCardsPlayer().size());
         Card card = machinePlayer.getCard(index);
-        table.addCardOnTheTable(card);
-        tableImageView.setImage(card.getImage());
+        boolean validCard = card.getValue().equals("+4") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue());
+        if (validCard){
+            table.addCardOnTheTable(card);
+            tableImageView.setImage(card.getImage());
+            hasPlayerPlayed = false;
+        }
+        else {
+            hasPlayerPlayed = false; //pasa turno
+        }
+
     }
+
 
     public void setHasPlayerPlayed(boolean hasPlayerPlayed) {
         this.hasPlayerPlayed = hasPlayerPlayed;

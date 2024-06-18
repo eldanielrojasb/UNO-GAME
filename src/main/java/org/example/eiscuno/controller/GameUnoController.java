@@ -78,11 +78,14 @@ public class GameUnoController {
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
-                // Aqui deberian verificar si pueden en la tabla jugar esa carta
-                gameUno.playCard(card);
-                tableImageView.setImage(card.getImage());
-                humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                threadPlayMachine.setHasPlayerPlayed(true);
+                if (card.getValue().equals("+4")||card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue())) {
+                    gameUno.playCard(card);
+                    tableImageView.setImage(card.getImage());
+                    humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
+                }
+                else {
+                    humanPlayer.addCard(deck.takeCard()); //come carta
+                }
                 printCardsHumanPlayer();
             });
 
@@ -150,4 +153,5 @@ public class GameUnoController {
     void onHandleUno(ActionEvent event) {
         // Implement logic to handle Uno event here
     }
+
 }
