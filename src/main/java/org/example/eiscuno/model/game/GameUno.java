@@ -44,6 +44,8 @@ public class GameUno implements IGameUno {
                 machinePlayer.addCard(this.deck.takeCard());
             }
         }
+
+        this.table.setStartCard(this.deck.takeCard());
     }
 
     /**
@@ -52,8 +54,8 @@ public class GameUno implements IGameUno {
      * @param card The card to be placed on the table.
      */
     @Override
-    public void playCard(Card card) {
-        this.table.addCardOnTheTable(card);
+    public Boolean playCard(Card card) {
+        return this.table.addCardOnTheTable(card);
     }
 
     /**
