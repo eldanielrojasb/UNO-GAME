@@ -18,7 +18,7 @@ public interface IGameUno {
      *
      * @param card the card to be played
      */
-    void playCard(Card card);
+    Boolean playCard(Card card);
 
     /**
      * Handles the action when a player shouts "Uno".

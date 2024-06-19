@@ -44,10 +44,7 @@ public class GameUnoController {
     public void initialize() {
         initVariables();
         this.gameUno.startGame();
-
-        this.gameUno.playCard(deck.takeCard());
-        this.tableImageView.setImage(this.table.getCurrentCardOnTheTable().getImage());
-
+        this.tableImageView.setImage(this.table.getCardsTable().get(0).getImage());
         printCardsHumanPlayer();
 
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer());
@@ -82,17 +79,13 @@ public class GameUnoController {
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
-                if (this.table.getCurrentCardOnTheTable().getColor().equals(card.getColor()) ||
-                                this.table.getCurrentCardOnTheTable().getValue().equals(card.getValue())
-                ) {
-                    this.gameUno.playCard(card);
-                    this.tableImageView.setImage(card.getImage());
-                    this.humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                    this.threadPlayMachine.setHasPlayerPlayed(true);
-                    printCardsHumanPlayer();
-                    this.gameUno.validateSpecialCard(card, this.machinePlayer);
-                }
-
+                    if(this.gameUno.playCard(card)){
+                        this.tableImageView.setImage(card.getImage());
+                        this.humanPlayer.removeCard(findPosCardsHumanPlayer(card));
+                        this.threadPlayMachine.setHasPlayerPlayed(true);
+                        printCardsHumanPlayer();
+                        this.gameUno.validateSpecialCard(card, this.machinePlayer);
+                    }
             });
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
