@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.game.GameUno;
@@ -12,6 +13,7 @@ import org.example.eiscuno.model.machine.ThreadPlayMachine;
 import org.example.eiscuno.model.machine.ThreadSingUNOMachine;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 
 /**
  * Controller class for the Uno game.
@@ -37,6 +39,8 @@ public class GameUnoController {
     private ThreadSingUNOMachine threadSingUNOMachine;
     private ThreadPlayMachine threadPlayMachine;
 
+    private Stage stage;
+
     /**
      * Initializes the controller.
      */
@@ -44,14 +48,14 @@ public class GameUnoController {
     public void initialize() {
         initVariables();
         this.gameUno.startGame();
-        this.tableImageView.setImage(this.table.getCardsTable().get(0).getImage());
         printCardsHumanPlayer();
+        printCardsMachinePlayer();
 
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer());
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
-        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView);
+        threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView,this.gridPaneCardsMachine,this.deck);
         threadPlayMachine.start();
     }
 
@@ -79,20 +83,36 @@ public class GameUnoController {
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
-                    if(this.gameUno.playCard(card)){
-                        this.tableImageView.setImage(card.getImage());
-                        this.humanPlayer.removeCard(findPosCardsHumanPlayer(card));
-                        this.threadPlayMachine.setHasPlayerPlayed(true);
-                        printCardsHumanPlayer();
-                        this.gameUno.validateSpecialCard(card, this.machinePlayer);
-                    }
+                if (card.getValue().equals("+4")||card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue())) {
+                    gameUno.playCard(card);
+                    tableImageView.setImage(card.getImage());
+                    humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
+                    threadPlayMachine.setHasPlayerPlayed(true);
+                }
+
+                printCardsHumanPlayer();
             });
+
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
     }
+    private void printCardsMachinePlayer() {
 
+        this.gridPaneCardsMachine.getChildren().clear();
+        int numCardsMachinePlayer = 4;
+        Card cardToPlay = this.machinePlayer.getCardsPlayer().get(0);
 
+        gameUno.playCard(cardToPlay);
 
+        tableImageView.setImage(cardToPlay.getImage());
+        for (int i = 0; i < numCardsMachinePlayer; i++) {
+            ImageView cardsMachine = new ImageView(EISCUnoEnum.CARD_UNO.getFilePath());
+            cardsMachine.setFitWidth(90);
+            cardsMachine.setFitHeight(100);
+            cardsMachine.setPreserveRatio(true);
+            this.gridPaneCardsMachine.add(cardsMachine, i, 0);
+        }
+    }
     /**
      * Finds the position of a specific card in the human player's hand.
      *
@@ -107,6 +127,7 @@ public class GameUnoController {
         }
         return -1;
     }
+
 
     /**
      * Handles the "Back" button action to show the previous set of cards.
@@ -141,7 +162,11 @@ public class GameUnoController {
      */
     @FXML
     void onHandleTakeCard(ActionEvent event) {
-        // Implement logic to take a card here
+        Card newCard = deck.takeCard();
+
+        humanPlayer.addCard(newCard);
+
+        printCardsHumanPlayer();
     }
 
     /**
@@ -152,5 +177,13 @@ public class GameUnoController {
     @FXML
     void onHandleUno(ActionEvent event) {
         // Implement logic to handle Uno event here
+    }
+
+    @FXML
+    void onHandleExit(ActionEvent event) {
+        stage.close();
+    }
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
