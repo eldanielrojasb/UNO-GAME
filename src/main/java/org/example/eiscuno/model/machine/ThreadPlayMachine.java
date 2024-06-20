@@ -45,6 +45,7 @@ public class ThreadPlayMachine extends Thread {
             hasPlayerPlayed = false;
         }
         else {
+            //debe de comer carta tambien
             hasPlayerPlayed = false; //pasa turno
         }
 
