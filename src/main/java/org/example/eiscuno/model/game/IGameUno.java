@@ -14,19 +14,11 @@ public interface IGameUno {
     void startGame();
 
     /**
-     * Makes a player draw a specified number of cards from the deck.
-     *
-     * @param player the player who will draw the cards
-     * @param numberOfCards the number of cards to be drawn
-     */
-    void eatCard(Player player, int numberOfCards);
-
-    /**
      * Plays a card in the game, adding it to the table.
      *
      * @param card the card to be played
      */
-    void playCard(Card card);
+    Boolean playCard(Card card);
 
     /**
      * Handles the action when a player shouts "Uno".
@@ -49,4 +41,10 @@ public interface IGameUno {
      * @return true if the game is over, false otherwise
      */
     Boolean isGameOver();
+
+    /**
+     * Validate if is a special card.
+     *
+     */
+    void validateSpecialCard(Card card, Player player);
 }

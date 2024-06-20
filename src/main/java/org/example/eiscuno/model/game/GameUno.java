@@ -45,19 +45,8 @@ public class GameUno implements IGameUno {
                 machinePlayer.addCard(this.deck.takeCard());
             }
         }
-    }
 
-    /**
-     * Allows a player to draw a specified number of cards from the deck.
-     *
-     * @param player        The player who will draw cards.
-     * @param numberOfCards The number of cards to draw.
-     */
-    @Override
-    public void eatCard(Player player, int numberOfCards) {
-        for (int i = 0; i < numberOfCards; i++) {
-            player.addCard(this.deck.takeCard());
-        }
+        this.table.setStartCard(this.deck.takeCard());
     }
 
     /**
@@ -66,8 +55,8 @@ public class GameUno implements IGameUno {
      * @param card The card to be placed on the table.
      */
     @Override
-    public void playCard(Card card) {
-        this.table.addCardOnTheTable(card);
+    public Boolean playCard(Card card) {
+        return this.table.addCardOnTheTable(card);
     }
 
 
@@ -114,5 +103,33 @@ public class GameUno implements IGameUno {
     @Override
     public Boolean isGameOver() {
         return null;
+    }
+
+    /**
+     * Validate if is a special card.
+     *
+     */
+    @Override
+    public void validateSpecialCard(Card card, Player player) {
+        int numberOfCards = 0;
+
+        if(card.getValue().contains("+2")) {
+            numberOfCards = 2;
+        } else if (card.getValue().contains("+4")) {
+            numberOfCards = 4;
+        }
+
+        if(numberOfCards > 0){
+            System.out.println(player.getTypePlayer() + " have: " + player.getCardsPlayer().size() + " cards");
+        }
+
+        for (int i = 0; i < numberOfCards; i++) {
+            player.addCard(this.deck.takeCard());
+        }
+
+        if(numberOfCards > 0){
+            System.out.println(player.getTypePlayer() + " eat now: " + numberOfCards + " cards");
+            System.out.println(player.getTypePlayer() + " have now: " + player.getCardsPlayer().size() + " cards");
+        }
     }
 }
