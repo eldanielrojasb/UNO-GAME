@@ -8,7 +8,8 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
-import javafx.scene.layout.GridPane;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class ThreadPlayMachine extends Thread {
@@ -53,15 +54,24 @@ public class ThreadPlayMachine extends Thread {
 
     private void putCardOnTheTable() {
         Card card = null;
-        boolean validCard = false;
+        AtomicBoolean validCard = new AtomicBoolean(false);
 
-        while (!validCard && machinePlayer.getCardsPlayer().size() > 0) {
+
+        while (!validCard.get() && machinePlayer.getCardsPlayer().size() > 0) {
             int index = (int) (Math.random() * machinePlayer.getCardsPlayer().size());
             card = machinePlayer.getCard(index);
+            //es valida si cumple con ser +4, WILD, o el color o el número
+            validCard.set(card.getValue().equals("+4") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue()));
 
-            validCard = card.getValue().equals("+4") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue());
+            // falta colocar la lógica de los poderes aquí
 
-            if (validCard) {
+            // En caso de ser +4
+            // En caso de ser +2
+            // En caso de ser WILD
+            // En caso de ser SKIP
+            // En caso de ser RESERVE
+
+            if (validCard.get()) {
                 table.addCardOnTheTable(card);
                 tableImageView.setImage(card.getImage());
                 machinePlayer.removeCard(index);
@@ -72,9 +82,11 @@ public class ThreadPlayMachine extends Thread {
                 });
 
             } else {
-
+                //Si no tiene, come.
                 Card newCard = deck.takeCard();
                 machinePlayer.addCard(newCard);
+                validCard.set(true); //Sale del bucle, así solo come 1
+                System.out.println("Comí una");
                 Platform.runLater(() -> {
                     ImageView cardBackImageView = new ImageView(EISCUnoEnum.CARD_UNO.getFilePath());
                     cardBackImageView.setFitWidth(90);
