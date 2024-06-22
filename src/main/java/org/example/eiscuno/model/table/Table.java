@@ -38,4 +38,9 @@ public class Table {
         }
         return this.cardsTable.get(this.cardsTable.size()-1);
     }
+
+    public ArrayList<Card> getCardsTable() {
+        return cardsTable;
+    }
 }
+
