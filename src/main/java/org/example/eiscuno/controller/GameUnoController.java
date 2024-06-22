@@ -15,6 +15,7 @@ import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 
+
 /**
  * Controller class for the Uno game.
  */
@@ -50,13 +51,13 @@ public class GameUnoController {
         this.gameUno.startGame();
         printCardsHumanPlayer();
         printCardsMachinePlayer();
-
         threadSingUNOMachine = new ThreadSingUNOMachine(this.humanPlayer.getCardsPlayer());
         Thread t = new Thread(threadSingUNOMachine, "ThreadSingUNO");
         t.start();
 
         threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView,this.gridPaneCardsMachine,this.deck);
         threadPlayMachine.start();
+        checkUnoCalled();
     }
 
     /**
@@ -71,6 +72,14 @@ public class GameUnoController {
         this.posInitCardToShow = 0;
     }
 
+    public void checkUnoCalled(){
+        if (threadSingUNOMachine.isUnoCalled()) {
+            gameUno.haveSungOne("MACHINE");
+            System.out.println("La máquina canto uno");
+            threadSingUNOMachine.setUnoCalled(false);
+            printCardsHumanPlayer();
+        }
+    }
     /**
      * Prints the human player's cards on the grid pane.
      */
@@ -78,50 +87,74 @@ public class GameUnoController {
         this.gridPaneCardsPlayer.getChildren().clear();
         Card[] currentVisibleCardsHumanPlayer = this.gameUno.getCurrentVisibleCardsHumanPlayer(this.posInitCardToShow);
 
+
+
         for (int i = 0; i < currentVisibleCardsHumanPlayer.length; i++) {
             Card card = currentVisibleCardsHumanPlayer[i];
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
                 //Si la carta es del mismo color o tiene un valor de valor
-                if (card.getValue().equals("+4") || card.getValue().equals("SKIP") || card.getValue().equals("RESERVE") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue())) {
-                    gameUno.playCard(card); //Juega la carta
-                    tableImageView.setImage(card.getImage());
-                    humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
+                if (card.getValue().equals("+4") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue())) {
+
                     //Si un simple numero, lo pone y pasa turno, siempre y cuando lo que esta en la mesa no sea un cambia color
-                    if (card.getValue().matches("[0-9]") && !table.getCurrentCardOnTheTable().getValue().equals("WILD")) {
+                    if (card.getValue().matches("[0-9]") && !table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
+                        gameUno.playCard(card); //Juega la carta
+                        tableImageView.setImage(card.getImage());
+                        humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
                         threadPlayMachine.setHasPlayerPlayed(true); //pasa el turno
                     }
 
                     //Si la carta es un "+2", lo pone y no pasa turno, la maquina come 2
                     if (card.getValue().equals("+2")) {
-                        for (int j = 0; j < 2; j++) {
-                            machinePlayer.addCard(deck.takeCard());
-                        }
+                        gameUno.playCard(card); //Juega la carta
+                        tableImageView.setImage(card.getImage());
+                        humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
+                        gameUno.eatCard(machinePlayer,2);
+                        System.out.println("Ahora tengo " + machinePlayer.getCardsPlayer().size() + "en la baraja");
+                        threadPlayMachine.setHasPlayerPlayed(false); //repite turno
                     }
 
                     //Si la carta es un "+4", lo pone y no pasa turno, la maquina come 4
                     if (card.getValue().equals("+4")) {
-                        for (int j = 0; j < 4; j++) {
-                            machinePlayer.addCard(deck.takeCard());
-                        }
+                        gameUno.playCard(card); //Juega la carta
+                        tableImageView.setImage(card.getImage());
+                        humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
+                        gameUno.eatCard(machinePlayer,4);
+                        System.out.println("Ahora tengo " + machinePlayer.getCardsPlayer().size() + "en la baraja");
+                        threadPlayMachine.setHasPlayerPlayed(false); //Repite turno
+                        return;
+                    }
+                    //Si la carta es un cambia color
+                    if (card.getValue().equals("WILD")){
+                        gameUno.playCard(card); //Juega la carta
+                        tableImageView.setImage(card.getImage());
+                        humanPlayer.removeCard((findPosCardsHumanPlayer(card)   ));
+                        threadPlayMachine.setHasPlayerPlayed(false); //repite turno
+                    }
+                    //Si la carta es un SKIP o REVERSE
+                    if (card.getValue().equals("SKIP") || card.getValue().equals("RESERVE")) {
+                        gameUno.playCard(card); //Juega la carta
+                        tableImageView.setImage(card.getImage());
+                        humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
+                        threadPlayMachine.setHasPlayerPlayed(false); //repite turno
                     }
 
                 }
-
                 // Si la carta en la mesa es un cambia color, se le asigna el color que seleccione el usuario y cede el turno
                 if (table.getCurrentCardOnTheTable().getValue().equals("WILD") && table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
                     table.getCurrentCardOnTheTable().setColor(card.getColor());
+                    System.out.println("Ahora el color es: " + table.getCurrentCardOnTheTable().getColor());
                     threadPlayMachine.setHasPlayerPlayed(true); //pasa el turno
                 }
 
-                //Si la carta en la mesa es un +4, se selecciona el color de la carta seleccionada y se coloca la carta seleccionada
+                //Si la carta en la mesa es un +4, se selecciona el color de la carta seleccionada
                 if (table.getCurrentCardOnTheTable().getValue().equals("+4") && table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
                     table.getCurrentCardOnTheTable().setColor(card.getColor());
                     System.out.println("Ahora el color es: " + table.getCurrentCardOnTheTable().getColor());
-                    //gameUno.playCard(card);
-                    //tableImageView.setImage(card.getImage());
-                    //humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
+                    gameUno.playCard(card); //Juega la carta
+                    tableImageView.setImage(card.getImage());
+                    humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
                     threadPlayMachine.setHasPlayerPlayed(true);
                 }
                 printCardsHumanPlayer();
@@ -136,9 +169,41 @@ public class GameUnoController {
         int numCardsMachinePlayer = 4;
         Card cardToPlay = this.machinePlayer.getCardsPlayer().get(0);
 
-        gameUno.playCard(cardToPlay);
+        //Si es un +2
+        if (cardToPlay.getValue().equals("+2")) {
+            gameUno.playCard(cardToPlay);
+            for (int i = 0; i < 2; i++) {
+                humanPlayer.addCard(deck.takeCard());
+                printCardsHumanPlayer();
+            }
+        }
+        //Si es un +4
+        if (cardToPlay.getValue().equals("+4")) {
+            gameUno.playCard(cardToPlay);
+            for (int i = 0; i < 4; i++) {
+                humanPlayer.addCard(deck.takeCard());
+                printCardsHumanPlayer();
+            }
+        }
+
+        if (cardToPlay.getValue().equals("SKIP")) {
+            gameUno.playCard(cardToPlay);
+        }
+
+        if (cardToPlay.getValue().equals("RESERVE")) {
+            gameUno.playCard(cardToPlay);
+        }
+
+        if (cardToPlay.getValue().equals("WILD")) {
+            gameUno.playCard(cardToPlay);
+        }
+
+        if (cardToPlay.getValue().matches("[0-9]") && !table.getCurrentCardOnTheTable().getValue().equals("WILD")) {
+            gameUno.playCard(cardToPlay);
+        }
 
         tableImageView.setImage(cardToPlay.getImage());
+
         for (int i = 0; i < numCardsMachinePlayer; i++) {
             ImageView cardsMachine = new ImageView(EISCUnoEnum.CARD_UNO.getFilePath());
             cardsMachine.setFitWidth(90);
@@ -209,8 +274,12 @@ public class GameUnoController {
      */
     @FXML
     void onHandleUno(ActionEvent event) {
-        // Implement logic to handle Uno event here
+        gameUno.haveSungOne("HUMAN_PLAYER");
     }
+
+
+
+
 
     @FXML
     void onHandleExit(ActionEvent event) {
@@ -219,4 +288,6 @@ public class GameUnoController {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+
 }

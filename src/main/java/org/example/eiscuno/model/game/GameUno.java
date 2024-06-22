@@ -1,9 +1,11 @@
 package org.example.eiscuno.model.game;
 
+import org.example.eiscuno.controller.GameUnoController;
 import org.example.eiscuno.model.card.Card;
 import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
+import org.example.eiscuno.view.GameUnoStage;
 
 /**
  * Represents a game of Uno.
@@ -56,7 +58,8 @@ public class GameUno implements IGameUno {
     @Override
     public void eatCard(Player player, int numberOfCards) {
         for (int i = 0; i < numberOfCards; i++) {
-            player.addCard(this.deck.takeCard());
+            Card newCard = deck.takeCard();
+            player.addCard(newCard);
         }
     }
 
@@ -82,6 +85,7 @@ public class GameUno implements IGameUno {
     public void haveSungOne(String playerWhoSang) {
         if (playerWhoSang.equals("HUMAN_PLAYER")) {
             machinePlayer.addCard(this.deck.takeCard());
+            ;
         } else {
             humanPlayer.addCard(this.deck.takeCard());
         }
