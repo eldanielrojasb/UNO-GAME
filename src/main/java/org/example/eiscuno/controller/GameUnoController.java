@@ -155,6 +155,9 @@ public class GameUnoController {
 
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
         }
+        if (humanPlayer.getCardsPlayer().isEmpty()){
+            stage.close();
+        }
     }
     private void printCardsMachinePlayer() {
 
