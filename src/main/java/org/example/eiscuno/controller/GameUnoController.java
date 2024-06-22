@@ -15,6 +15,8 @@ import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 
+import static org.example.eiscuno.model.machine.ThreadSingUNOMachine.durationM;
+import static org.example.eiscuno.model.machine.ThreadSingUNOMachine.startTime;
 
 /**
  * Controller class for the Uno game.
@@ -57,7 +59,6 @@ public class GameUnoController {
 
         threadPlayMachine = new ThreadPlayMachine(this.table, this.machinePlayer, this.tableImageView,this.gridPaneCardsMachine,this.deck);
         threadPlayMachine.start();
-        checkUnoCalled();
     }
 
     /**
@@ -72,14 +73,6 @@ public class GameUnoController {
         this.posInitCardToShow = 0;
     }
 
-    public void checkUnoCalled(){
-        if (threadSingUNOMachine.isUnoCalled()) {
-            gameUno.haveSungOne("MACHINE");
-            System.out.println("La máquina canto uno");
-            threadSingUNOMachine.setUnoCalled(false);
-            printCardsHumanPlayer();
-        }
-    }
     /**
      * Prints the human player's cards on the grid pane.
      */
@@ -161,6 +154,9 @@ public class GameUnoController {
             });
 
             this.gridPaneCardsPlayer.add(cardImageView, i, 0);
+        }
+        if (humanPlayer.getCardsPlayer().isEmpty()){
+            stage.close();
         }
     }
     private void printCardsMachinePlayer() {
@@ -274,11 +270,22 @@ public class GameUnoController {
      */
     @FXML
     void onHandleUno(ActionEvent event) {
-        gameUno.haveSungOne("HUMAN_PLAYER");
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+
+        if (duration >= durationM){
+            punishPlayer();
+        } else {
+            System.out.println("Cantaste primero");
+        }
     }
 
-
-
+    public void punishPlayer() {
+        Card punishmentCard = deck.takeCard();
+        humanPlayer.addCard(punishmentCard);
+        printCardsHumanPlayer();
+        System.out.println("Te demoraste mucho en decir UNO");
+    }
 
 
     @FXML
@@ -289,5 +296,5 @@ public class GameUnoController {
         this.stage = stage;
     }
 
-
 }
+

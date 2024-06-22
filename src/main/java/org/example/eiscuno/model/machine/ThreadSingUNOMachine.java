@@ -6,11 +6,15 @@ import java.util.ArrayList;
 
 public class ThreadSingUNOMachine implements Runnable{
     private ArrayList<Card> cardsPlayer;
-    private volatile boolean unoCalled;
+    public static long startTimeM;
+    public static long startTime;
+    public static long endTimeM;
+    public static long durationM;
+
+
+
     public ThreadSingUNOMachine(ArrayList<Card> cardsPlayer){
         this.cardsPlayer = cardsPlayer;
-        this.unoCalled = false;  // Inicialmente está en true
-
     }
 
     @Override
@@ -26,16 +30,13 @@ public class ThreadSingUNOMachine implements Runnable{
     }
 
     private void hasOneCardTheHumanPlayer(){
-        if(cardsPlayer.size() == 1){
-            System.out.println("UNO");
-            setUnoCalled(true);
-        }
-    }
-    public synchronized boolean isUnoCalled() {
-        return unoCalled;
-    }
+        if(cardsPlayer.size() == 1 ){
 
-    public synchronized void setUnoCalled(boolean unoCalled) {
-        this.unoCalled = unoCalled;
+            long startTimeM = System.nanoTime();
+            long startTime = System.nanoTime();
+            System.out.println("UNO");
+            long endTimeM = System.nanoTime();
+            long durationM = endTimeM - startTimeM;
+        }
     }
 }
