@@ -15,6 +15,9 @@ import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
 
+import static org.example.eiscuno.model.machine.ThreadSingUNOMachine.durationM;
+import static org.example.eiscuno.model.machine.ThreadSingUNOMachine.startTime;
+
 /**
  * Controller class for the Uno game.
  */
@@ -83,24 +86,24 @@ public class GameUnoController {
             ImageView cardImageView = card.getCard();
 
             cardImageView.setOnMouseClicked((MouseEvent event) -> {
-                //Si la carta es del mismo color o tiene un valor de valor
+                //If the card is the same color or has a value value
                 if (card.getValue().equals("+4") || card.getValue().equals("SKIP") || card.getValue().equals("RESERVE") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue())) {
-                    gameUno.playCard(card); //Juega la carta
+                    gameUno.playCard(card); //Play the card
                     tableImageView.setImage(card.getImage());
                     humanPlayer.removeCard((findPosCardsHumanPlayer(card)));
-                    //Si un simple numero, lo pone y pasa turno, siempre y cuando lo que esta en la mesa no sea un cambia color
+                    //If a simple number, put it and take a turn, as long as what is on the table is not a color changer
                     if (card.getValue().matches("[0-9]") && !table.getCurrentCardOnTheTable().getValue().equals("WILD")) {
                         threadPlayMachine.setHasPlayerPlayed(true); //pasa el turno
                     }
 
-                    //Si la carta es un "+2", lo pone y no pasa turno, la maquina come 2
+                    //If the card is a "+2", you put it and the turn does not pass, the machine eats 2
                     if (card.getValue().equals("+2")) {
                         for (int j = 0; j < 2; j++) {
                             machinePlayer.addCard(deck.takeCard());
                         }
                     }
 
-                    //Si la carta es un "+4", lo pone y no pasa turno, la maquina come 4
+                    //If the card is a "+4", you put it and the turn does not pass, the machine eats 4
                     if (card.getValue().equals("+4")) {
                         for (int j = 0; j < 4; j++) {
                             machinePlayer.addCard(deck.takeCard());
@@ -109,13 +112,13 @@ public class GameUnoController {
 
                 }
 
-                // Si la carta en la mesa es un cambia color, se le asigna el color que seleccione el usuario y cede el turno
+                // If the card on the table is a color changer, it is assigned the color selected by the user and the turn is over
                 if (table.getCurrentCardOnTheTable().getValue().equals("WILD") && table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
                     table.getCurrentCardOnTheTable().setColor(card.getColor());
                     threadPlayMachine.setHasPlayerPlayed(true); //pasa el turno
                 }
 
-                //Si la carta en la mesa es un +4, se selecciona el color de la carta seleccionada y se coloca la carta seleccionada
+                //If the card on the table is a +4, the color of the selected card is selected and the selected card is placed
                 if (table.getCurrentCardOnTheTable().getValue().equals("+4") && table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
                     table.getCurrentCardOnTheTable().setColor(card.getColor());
                     System.out.println("Ahora el color es: " + table.getCurrentCardOnTheTable().getColor());
@@ -209,7 +212,25 @@ public class GameUnoController {
      */
     @FXML
     void onHandleUno(ActionEvent event) {
+        long endTime = System.nanoTime();
+        long duration = endTime - startTime;
+
+        if(duration >= durationM){
+            punishPlayer();
+
+        } else if (duration <= durationM) {
+            System.out.println("sii");
+
+        }
         // Implement logic to handle Uno event here
+    }
+
+    public void punishPlayer() {
+
+        Card punishmentCard = deck.takeCard();
+        humanPlayer.addCard(punishmentCard);
+        printCardsHumanPlayer();
+        System.out.println("El jugador ha recibido una carta de castigo.");
     }
 
     @FXML
