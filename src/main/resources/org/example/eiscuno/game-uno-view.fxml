@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -28,9 +27,16 @@
         </Pane>
     </left>
     <right>
-        <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <Pane prefHeight="175.0" prefWidth="164.0" BorderPane.alignment="CENTER">
             <children>
-                <Button layoutX="50.0" layoutY="75.0" mnemonicParsing="false" onAction="#onHandleUno" prefHeight="50.0" prefWidth="100.0" text="UNO" />
+                <Button layoutX="14.0" layoutY="35.0" mnemonicParsing="false" onAction="#onHandleUno" prefHeight="114.0" prefWidth="122.0" style="-fx-background-color: orange;">
+                    <graphic>
+                        <ImageView fitHeight="89.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@images/button_uno.png" />
+                            </image>
+                        </ImageView>
+                    </graphic></Button>
             </children>
         </Pane>
     </right>
@@ -44,11 +50,11 @@
     <top>
         <HBox alignment="CENTER" prefHeight="101.0" prefWidth="600.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
-                <Label text="EISC Uno" textFill="RED">
-                    <font>
-                        <Font name="Berlin Sans FB Bold" size="18.0" />
-                    </font>
-                </Label>
+                <ImageView fitHeight="83.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@images/uno.png" />
+                    </image>
+                </ImageView>
                 <GridPane fx:id="gridPaneCardsMachine" prefHeight="100.0" prefWidth="406.0">
                     <columnConstraints>
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

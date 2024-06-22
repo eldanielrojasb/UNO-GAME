@@ -8,7 +8,9 @@ import org.example.eiscuno.model.deck.Deck;
 import org.example.eiscuno.model.player.Player;
 import org.example.eiscuno.model.table.Table;
 import org.example.eiscuno.model.unoenum.EISCUnoEnum;
-import javafx.scene.layout.GridPane;
+
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class ThreadPlayMachine extends Thread {
@@ -43,7 +45,7 @@ public class ThreadPlayMachine extends Thread {
                     putCardOnTheTable();
 
                     // Reiniciar la bandera para que el hilo espere de nuevo
-                    hasPlayerPlayed = false;
+                    //hasPlayerPlayed = false;
                 }
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt(); // Restablecer la bandera de interrupción
@@ -53,36 +55,99 @@ public class ThreadPlayMachine extends Thread {
 
     private void putCardOnTheTable() {
         Card card = null;
-        boolean validCard = false;
+        AtomicBoolean validCard = new AtomicBoolean(false);
 
-        while (!validCard && machinePlayer.getCardsPlayer().size() > 0) {
+
+        while (!validCard.get() && machinePlayer.getCardsPlayer().size() > 0) {
             int index = (int) (Math.random() * machinePlayer.getCardsPlayer().size());
             card = machinePlayer.getCard(index);
+            //es valida si cumple con ser +4, WILD, o el color o el número
+            validCard.set(card.getValue().equals("+4") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue()));
 
-            validCard = card.getValue().equals("+4") || card.getValue().equals("WILD") || card.getColor().equals(table.getCurrentCardOnTheTable().getColor()) || card.getValue().equals(table.getCurrentCardOnTheTable().getValue());
+            //Si colocó +4, escoge el color de la nueva carta, y repite turno
+            if (hasPlayerPlayed && table.getCurrentCardOnTheTable().getValue().equals("+4") && table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
+                table.getCurrentCardOnTheTable().setColor(card.getColor());
+                System.out.println("Ahora el color es: " + table.getCurrentCardOnTheTable().getColor());
+                setHasPlayerPlayed(true); //repito turno
+            }
+            //Si colocó WILD, escoge el color de la nueva carta, y repite turno
+            if (hasPlayerPlayed && table.getCurrentCardOnTheTable().getValue().equals("WILD") && table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
+                table.getCurrentCardOnTheTable().setColor(new String[]{"YELLOW", "GREEN", "RED", "BLUE"}[new Random().nextInt(4)]);
+                System.out.println("Ahora el color es: " + table.getCurrentCardOnTheTable().getColor());
+                setHasPlayerPlayed(false); //cede turno
+            }
 
-            if (validCard) {
-                table.addCardOnTheTable(card);
-                tableImageView.setImage(card.getImage());
-                machinePlayer.removeCard(index);
+
+            if (validCard.get()) {
+
+                //Si es un número juega y cede turno
+                if (card.getValue().matches("[0-9]") && !table.getCurrentCardOnTheTable().getValue().equals("WILD")) {
+                    table.addCardOnTheTable(card);
+                    tableImageView.setImage(card.getImage());
+                    machinePlayer.removeCard(index);
+                    setHasPlayerPlayed(false); //pasa el turno
+                }
+
+                //Si es un +2, juega y repite turno
+                if (card.getValue().equals("+2")){
+                    table.addCardOnTheTable(card);
+                    tableImageView.setImage(card.getImage());
+                    machinePlayer.removeCard(index);
+                    setHasPlayerPlayed(true); //repito turno
+                }
+                //Si es un +4 juega y repite turno
+                if (card.getValue().equals("+4")){
+                    table.addCardOnTheTable(card);
+                    tableImageView.setImage(card.getImage());
+                    machinePlayer.removeCard(index);
+                    setHasPlayerPlayed(true); //repite turno
+                }
+                //Si es un cambia color, juega y repito turno
+                if (card.getValue().equals("WILD")) {
+                    table.addCardOnTheTable(card);
+                    tableImageView.setImage(card.getImage());
+                    machinePlayer.removeCard(index);
+                    setHasPlayerPlayed(true); //repito turno
+                }
+                //Si es un SKIP juega y repite turno
+                if (card.getValue().equals("SKIP") ||card.getValue().equals("RESERVE")){
+                    table.addCardOnTheTable(card);
+                    tableImageView.setImage(card.getImage());
+                    machinePlayer.removeCard(index);
+                    setHasPlayerPlayed(true); //repite turno
+                }
+
                 Platform.runLater(() -> {
-                    if (!gridPaneCardsMachine.getChildren().isEmpty()) {
+                    if (machinePlayer.getCardsPlayer().size() < 4) {
                         gridPaneCardsMachine.getChildren().remove(0);
                     }
                 });
 
+            } else if (hasPlayerPlayed && table.getCurrentCardOnTheTable().getValue().equals("+4") && !table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
+                setHasPlayerPlayed(true);
+            } else if (hasPlayerPlayed && table.getCurrentCardOnTheTable().getValue().equals("WILD") && !table.getCurrentCardOnTheTable().getColor().equals("NON_COLOR")) {
+                validCard.set(true);//Sale del bucle
+                setHasPlayerPlayed(false);//cede el turno
             } else {
-
+                //Si no tiene, come.
                 Card newCard = deck.takeCard();
                 machinePlayer.addCard(newCard);
-                Platform.runLater(() -> {
+                validCard.set(true); //Sale del bucle, así solo come 1
+                System.out.println("Comí una");
+                System.out.println("tengo: " + machinePlayer.getCardsPlayer().size());
+                setHasPlayerPlayed(false);
+            }
+            Platform.runLater(() -> {
+                if((gridPaneCardsMachine.getChildren().size() == 5) && (machinePlayer.getCardsPlayer().size() > 3) ) {
                     ImageView cardBackImageView = new ImageView(EISCUnoEnum.CARD_UNO.getFilePath());
                     cardBackImageView.setFitWidth(90);
                     cardBackImageView.setFitHeight(100);
                     cardBackImageView.setPreserveRatio(true);
                     gridPaneCardsMachine.add(cardBackImageView, gridPaneCardsMachine.getChildren().size(), 0);
-                });
-            }
+                    System.out.println("la baraja tiene: " +machinePlayer.getCardsPlayer().size());
+                    System.out.println("ahora el pane tiene " + gridPaneCardsMachine.getChildren().size());
+                }
+            });
         }
     }
 
@@ -91,3 +156,5 @@ public class ThreadPlayMachine extends Thread {
         notify();
     }
 }
+
+
