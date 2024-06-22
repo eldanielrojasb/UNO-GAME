@@ -6,9 +6,11 @@ import java.util.ArrayList;
 
 public class ThreadSingUNOMachine implements Runnable{
     private ArrayList<Card> cardsPlayer;
-
+    private volatile boolean unoCalled;
     public ThreadSingUNOMachine(ArrayList<Card> cardsPlayer){
         this.cardsPlayer = cardsPlayer;
+        this.unoCalled = false;  // Inicialmente está en true
+
     }
 
     @Override
@@ -26,6 +28,14 @@ public class ThreadSingUNOMachine implements Runnable{
     private void hasOneCardTheHumanPlayer(){
         if(cardsPlayer.size() == 1){
             System.out.println("UNO");
+            setUnoCalled(true);
         }
+    }
+    public synchronized boolean isUnoCalled() {
+        return unoCalled;
+    }
+
+    public synchronized void setUnoCalled(boolean unoCalled) {
+        this.unoCalled = unoCalled;
     }
 }
