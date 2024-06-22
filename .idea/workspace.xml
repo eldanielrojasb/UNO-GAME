@@ -4,13 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Special Cards - HPlayer">
+    <list default="true" id="1ee8ff40-bbdd-4aec-a3d2-cf5cc45130ec" name="Changes" comment="Special Cards - MPlayer">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/controller/GameUnoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/controller/GameUnoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/game/GameUno.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadPlayMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadPlayMachine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadSingUNOMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/model/machine/ThreadSingUNOMachine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/game-uno-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/eiscuno/game-uno-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/view/GameUnoStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/eiscuno/view/GameUnoStage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,7 +144,7 @@
       <workItem from="1717853787588" duration="7091000" />
       <workItem from="1718720068737" duration="620000" />
       <workItem from="1718924200596" duration="11450000" />
-      <workItem from="1718947050816" duration="33336000" />
+      <workItem from="1718947050816" duration="38728000" />
     </task>
     <task id="LOCAL-00001" summary="avance 3">
       <option name="closed" value="true" />
@@ -163,7 +162,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718935693807</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Special Cards - MPlayer">
+      <option name="closed" value="true" />
+      <created>1719018210943</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1719018210943</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -184,7 +191,8 @@
     <MESSAGE value="commit de ejemplo" />
     <MESSAGE value="avance 3" />
     <MESSAGE value="Special Cards - HPlayer" />
-    <option name="LAST_COMMIT_MESSAGE" value="Special Cards - HPlayer" />
+    <MESSAGE value="Special Cards - MPlayer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Special Cards - MPlayer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

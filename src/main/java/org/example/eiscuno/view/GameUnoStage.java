@@ -5,7 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import org.example.eiscuno.controller.GameUnoController;
-
+import javafx.scene.image.Image;
 import java.io.IOException;
 
 /**
@@ -35,8 +35,11 @@ public class GameUnoStage extends Stage {
         setTitle("EISC Uno"); // Sets the title of the stage
         setScene(scene); // Sets the scene for the stage
         setResizable(false); // Disallows resizing of the stage
-        show(); // Displays the stage
+        getIcons().add(
+                new Image(
+                        String.valueOf(getClass().getResource("/org/example/eiscuno/favicon.png"))));
 
+        show(); // Displays the stage
     }
 
     /**
